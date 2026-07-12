@@ -1,8 +1,12 @@
-# Portfolio Website Deployment using Docker on AWS EC2
+# Portfolio Website Deployment with Docker, AWS EC2 & GitHub Actions
 
 ## Project Overview
 
-This project demonstrates how to deploy a static portfolio website using Docker on an AWS EC2 instance. The website is containerized with Docker and served using the Nginx web server.
+This project demonstrates how to deploy a static portfolio website using Docker on an AWS EC2 instance and automate the Docker image build and push process using GitHub Actions.
+
+The website is containerized using Docker, hosted on AWS EC2, and integrated with a Continuous Integration (CI) pipeline.
+
+---
 
 ## Technologies Used
 
@@ -12,92 +16,149 @@ This project demonstrates how to deploy a static portfolio website using Docker 
 - Nginx
 - Git
 - GitHub
+- GitHub Actions
+- Docker Hub
 - AWS EC2 (Amazon Linux 2023)
 
-## Project Structure
+---
+
+## Project Architecture
 
 ```
-.
-├── Dockerfile
-├── index.html
-├── style.css
-└── README.md
+Developer
+    │
+    ▼
+VS Code
+    │
+git push
+    │
+    ▼
+GitHub Repository
+    │
+    ▼
+GitHub Actions (CI)
+    │
+    ├── Build Docker Image
+    └── Push Image to Docker Hub
+                    │
+                    ▼
+             Docker Hub Repository
+
+(Manual Deployment)
+
+Docker Hub
+    │
+    ▼
+AWS EC2 Instance
+    │
+    ▼
+Docker Container (Nginx)
+    │
+    ▼
+Live Portfolio Website
 ```
+
+---
+
+## Features
+
+- Responsive Portfolio Website
+- Docker Containerization
+- Hosted on AWS EC2
+- Automated Docker Image Build
+- Automated Docker Image Push to Docker Hub
+- Continuous Integration using GitHub Actions
+
+---
 
 ## Dockerfile
 
 ```dockerfile
 FROM nginx:alpine
+
 COPY . /usr/share/nginx/html
+
 EXPOSE 80
 ```
 
+---
+
 ## Deployment Steps
 
-### 1. Launch an AWS EC2 Instance
-- Create an Amazon Linux 2023 EC2 instance.
-- Allow HTTP (Port 80) in the Security Group.
-
-### 2. Install Docker
+### 1. Clone Repository
 
 ```bash
-sudo dnf update -y
-sudo dnf install docker -y
-sudo systemctl enable docker
-sudo systemctl start docker
-```
-
-### 3. Clone the Repository
-
-```bash
-git clone https://github.com/SivanesanR/sivanesan-portfolio1.git
+git clone https://github.com/Sivanesan-26/sivanesan-portfolio1.git
 cd sivanesan-portfolio1
 ```
 
-### 4. Build the Docker Image
+### 2. Build Docker Image
 
 ```bash
-sudo docker build -t portfolio-website .
+docker build -t portfolio-website .
 ```
 
-### 5. Run the Docker Container
+### 3. Run Docker Container
 
 ```bash
-sudo docker run -d -p 80:80 portfolio-website
+docker run -d -p 80:80 portfolio-website
 ```
 
-### 6. Verify the Running Container
+### 4. Deploy to AWS EC2
 
-```bash
-sudo docker ps
-```
+- Launch Amazon Linux EC2 Instance
+- Install Docker
+- Clone Repository
+- Build Docker Image
+- Run Docker Container
+- Allow HTTP (Port 80) in Security Group
 
-### 7. Access the Website
+---
 
-Open your browser and visit:
+## GitHub Actions Workflow
 
-```
-http://3.27.44.214
-```
+Whenever code is pushed to the **main** branch:
 
-## Features
+- Repository is checked out
+- Docker image is built automatically
+- Docker image is pushed to Docker Hub automatically
 
-- Responsive portfolio website
-- Docker containerized deployment
-- Hosted on AWS EC2
-- Served using Nginx
-- Publicly accessible through EC2 Public IP
+This automates the Continuous Integration (CI) process.
+
+**Note:** The deployment to AWS EC2 is still manual. After a new Docker image is pushed to Docker Hub, the latest image must be pulled and the Docker container restarted on the EC2 instance.
+
+---
+
+## Docker Hub Repository
+
+https://hub.docker.com/r/sivanesan19/portfolio-website
+
+---
 
 ## GitHub Repository
 
-https://github.com/SivanesanR/sivanesan-portfolio1
+https://github.com/Sivanesan-26/sivanesan-portfolio1
+
+---
 
 ## Live Website
 
 http://3.27.44.214
 
+---
+
+## Future Improvements
+
+- Automate deployment to AWS EC2 using GitHub Actions (Continuous Deployment)
+- Configure a custom domain
+- Enable HTTPS using SSL/TLS
+- Add monitoring and logging
+
+---
+
 ## Author
 
 **Sivanesan R**
 
-- GitHub: https://github.com/SivanesanR
+GitHub: https://github.com/Sivanesan-26
+Docker Hub: https://hub.docker.com/u/sivanesan19
